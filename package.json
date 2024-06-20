@@ -1,0 +1,20 @@
+{
+    "name": "com.3dimensions.fishnet-xr",
+    "displayName": "3Dimensions FishNet-XR",
+    "version": "0.1.0",
+    "unity": "2022.3",
+    "description": "Collection of assets to use the Unity XR Interaction Toolkit with the FishNet-Networking package",
+    "keywords": ["Component, Runtime, XR, Muliplayer"],
+    "category": "Runtime",
+    "changelogUrl": "https://github.com/3Dimensions-NL/FishNet-XR/releases/",
+    "author": {
+        "name": "3Dimensions v.o.f.",
+        "email": "info@3dimensions.nl",
+        "url": "https://www.3dimensions.nl"
+    },
+    "dependencies": {
+        "com.unity.textmeshpro": "3.0.8",
+        "com.unity.xr.interaction.toolkit": "2.5.4",
+        "com.3dimensions.unity-tools": "0.1.4"
+    }
+}
