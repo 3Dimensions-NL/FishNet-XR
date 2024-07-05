@@ -17,5 +17,12 @@
         "com.unity.inputsystem": "1.8.2",
         "com.unity.xr.interaction.toolkit": "2.5.4",
         "com.3dimensions.unity-tools": "0.1.4"
-    }
+    },
+    "samples": [
+        {
+            "displayName": "Sample assets",
+            "description": "Contains sample assets to help you get started",
+            "path": "Samples~/Assets"
+        }
+    ]
 }
