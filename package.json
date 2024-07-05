@@ -14,6 +14,7 @@
     },
     "dependencies": {
         "com.unity.textmeshpro": "3.0.8",
+        "com.unity.inputsystem": "1.8.2",
         "com.unity.xr.interaction.toolkit": "2.5.4",
         "com.3dimensions.unity-tools": "0.1.4"
     }

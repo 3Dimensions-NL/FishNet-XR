@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.unity.textmeshpro": "3.0.8",
+    "com.unity.inputsystem": "1.8.2",
     "com.unity.xr.interaction.toolkit": "2.5.4",
     "com.3dimensions.unity-tools": "https://github.com/3Dimensions-NL/UnityTools.git",
     "com.3dimensions.fishnet-xr": "file:../../FishNet-XR"
