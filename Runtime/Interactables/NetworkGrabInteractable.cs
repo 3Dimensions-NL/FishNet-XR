@@ -4,6 +4,7 @@ using FishNet.Object;
 using FishNet.Object.Synchronizing;
 using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.XR.Interaction.Toolkit;
 
 namespace _3Dimensions.FishNet_XR.Runtime.Interactables
@@ -29,6 +30,9 @@ namespace _3Dimensions.FishNet_XR.Runtime.Interactables
         
         public bool Grabbed => _state.Value == State.PickedUp;
 
+        public UnityEvent onActivated;
+        public UnityEvent onDeactivated;
+        
         [ServerRpc(RunLocally = true, RequireOwnership = false)] public void SetState(State value) => _state.Value = value;
         [ServerRpc(RunLocally = true, RequireOwnership = false)] public void SetAttachPoint(AttachPoint newAttachPoint) => _attachedPoint.Value = newAttachPoint;
 
@@ -82,17 +86,27 @@ namespace _3Dimensions.FishNet_XR.Runtime.Interactables
         public override void OnStartClient()
         {
             base.OnStartClient();
-            _simpleInteractable.activated.AddListener(OnPickup);
-            _simpleInteractable.deactivated.AddListener(OnReleased);
+            
+            _simpleInteractable.selectEntered.AddListener(OnSelectEntered);
+            _simpleInteractable.selectExited.AddListener(OnSelectExited);
+
+            _simpleInteractable.activated.AddListener(OnActivated);
+            _simpleInteractable.deactivated.AddListener(OnDeactivated);
             
             HandleState();
         }
 
+
+
         public override void OnStopClient()
         {
             base.OnStopClient();
-            _simpleInteractable.activated.RemoveListener(OnPickup);
-            _simpleInteractable.deactivated.RemoveListener(OnReleased);
+            
+            _simpleInteractable.selectEntered.RemoveListener(OnSelectEntered);
+            _simpleInteractable.selectExited.RemoveListener(OnSelectExited);
+            
+            _simpleInteractable.activated.RemoveListener(OnActivated);
+            _simpleInteractable.deactivated.RemoveListener(OnDeactivated);
 
             if (IsOwner)
             {
@@ -134,15 +148,43 @@ namespace _3Dimensions.FishNet_XR.Runtime.Interactables
             {
                 //We lost our ownership
                 Debug.Log("Ownership change to someone else!", this);
-                Released();
+                Release();
             }
         }
-
-        private void OnPickup(ActivateEventArgs arg0)
+        
+        private void OnSelectEntered(SelectEnterEventArgs arg0)
         {
-            Debug.Log("On Grabbed: " + arg0.interactableObject, gameObject);
-
+            Debug.Log("On Select Entered " + arg0.interactorObject, gameObject);
             _interactor = arg0.interactorObject;
+            Grab();
+        }
+        
+        private void OnSelectExited(SelectExitEventArgs arg0)
+        {
+            Debug.Log("On Select Exited " + arg0.interactorObject, gameObject);
+            Release();
+        }
+
+        private void OnActivated(ActivateEventArgs arg0)
+        {
+            Debug.Log("OnActivated: " + arg0.interactableObject, gameObject);
+            if (_interactor == null) return;
+            if (_interactor != arg0.interactorObject) return;
+            Activated();
+        }
+
+        private void OnDeactivated(DeactivateEventArgs arg0)
+        {
+            Debug.Log("OnDeactivated: " + arg0.interactableObject, gameObject);
+            if (_interactor == null) return;
+            if (_interactor != arg0.interactorObject) return;
+            Deactivated();
+        }
+
+        private void Grab()
+        {
+            if (_interactor == null) return;
+            
             ServerGiveOwnership(ClientManager.Connection);
 
             if (!snapToInteractor)
@@ -158,14 +200,7 @@ namespace _3Dimensions.FishNet_XR.Runtime.Interactables
             HandleState();
         }
 
-        private void OnReleased(DeactivateEventArgs arg0)
-        {
-            Debug.Log("On Released: " + arg0.interactableObject, gameObject);
-            if (arg0.interactorObject != _interactor) return;
-            Released();
-        }
-
-        private void Released()
+        private void Release()
         {
             _interactor = null;
             _releasedLastTick = true;
@@ -395,5 +430,33 @@ namespace _3Dimensions.FishNet_XR.Runtime.Interactables
             RemoveOwnership();
             HandleState();
         }
+
+        [ServerRpc]
+        private void Activated()
+        {
+            onActivated.Invoke();
+            ActivatedObserver();
+        }
+
+        [ObserversRpc]
+        private void ActivatedObserver()
+        {
+            if (IsServerStarted) return;
+            onActivated.Invoke();
+        }        
+
+        [ServerRpc]
+        private void Deactivated()
+        {
+            onDeactivated.Invoke();
+            DeactivatedObserver();
+        }
+        
+        [ObserversRpc]
+        private void DeactivatedObserver()
+        {
+            if (IsServerStarted) return;
+            onDeactivated.Invoke();
+        }      
     }
 }
