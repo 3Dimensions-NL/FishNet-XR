@@ -9,7 +9,7 @@ using UnityEngine.XR.Interaction.Toolkit;
 
 namespace _3Dimensions.FishNet_XR.Runtime.Interactables
 {
-    [RequireComponent(typeof(XRSimpleInteractable), typeof(Rigidbody))]
+    [RequireComponent(typeof(UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable), typeof(Rigidbody))]
     public class NetworkGrabInteractable : NetworkBehaviour
     {
         [SerializeField] private List<AttachPointType> attachPointTypes = new List<AttachPointType>();
@@ -41,9 +41,9 @@ namespace _3Dimensions.FishNet_XR.Runtime.Interactables
         private Vector3 _lastVelocity;
         private Vector3 _lastAngularVelocity;
         private Quaternion _lastRotation;
-        private XRSimpleInteractable _simpleInteractable;
+        private UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable _simpleInteractable;
         private Rigidbody _rigidBody;
-        private IXRInteractor _interactor;
+        private UnityEngine.XR.Interaction.Toolkit.Interactors.IXRInteractor _interactor;
         private bool _releasedLastTick;
         private Vector3 _grabOffset;
         private Quaternion _grabRotationOffset;
@@ -66,7 +66,7 @@ namespace _3Dimensions.FishNet_XR.Runtime.Interactables
         
         private void Awake()
         {
-            _simpleInteractable = GetComponent<XRSimpleInteractable>();
+            _simpleInteractable = GetComponent<UnityEngine.XR.Interaction.Toolkit.Interactables.XRSimpleInteractable>();
             _rigidBody = GetComponent<Rigidbody>();
         }
         

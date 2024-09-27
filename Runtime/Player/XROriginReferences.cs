@@ -1,6 +1,6 @@
 using Unity.XR.CoreUtils;
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
+
 namespace _3Dimensions.FishNet_XR.Runtime.Player
 {
     public class XROriginReferences : MonoBehaviour
@@ -31,8 +31,8 @@ namespace _3Dimensions.FishNet_XR.Runtime.Player
 
         [Header("Locomotion")]
         public XROrigin xrOrigin;
-        public LocomotionProvider locomotionProvider;
-        public TeleportationProvider teleportationProvider;
+        public UnityEngine.XR.Interaction.Toolkit.Locomotion.LocomotionProvider locomotionProvider;
+        public UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationProvider teleportationProvider;
 
         public Vector3[] LeftLaserPointerPositions()
         {

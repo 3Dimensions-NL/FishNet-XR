@@ -6,7 +6,7 @@ namespace _3Dimensions.FishNet_XR.Runtime.Utilities
 {
     public class TeleportManager : MonoBehaviour
     {
-        public TeleportationProvider teleportationProvider;
+        public UnityEngine.XR.Interaction.Toolkit.Locomotion.Teleportation.TeleportationProvider teleportationProvider;
         public Color teleportFadeColor = Color.black;
         public int fadePriority = 10;
         public float fadeSceneLoadDelayTime = 1;
